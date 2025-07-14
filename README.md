@@ -1,4 +1,4 @@
-# 🚗 Sistema de Gestão de Oficina - Torque
+# 🚗 Sistema de Gestão de Oficina - TorqueTech
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
