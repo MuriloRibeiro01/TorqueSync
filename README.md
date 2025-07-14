@@ -45,4 +45,4 @@ Este é um projeto de aprendizado, mas toda ajuda é bem-vinda! Se você encontr
 4.  Faça o **Push** para a Branch (`git push origin feature/sua-feature-incrivel`).
 5.  Abra um **Pull Request**.
 
-Feito com ☕ e muito código por **Murilo [Seu Sobrenome]**.
+Feito com ☕ e muito código por **Murilo Ribeiro da Silveira**.
