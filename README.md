@@ -1,4 +1,4 @@
-# 🚗 Sistema de Gestão de Oficina - TorqueSync
+# 🚗 TorqueSync - Sistema de Gestão de Frota para Locadoras
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
@@ -7,26 +7,50 @@
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-Um sistema simples e prático para gerenciamento de manutenções e revisões de veículos, inspirado por uma necessidade real e construído com muito carinho.
+O TorqueSync é uma aplicação web completa para a gestão inteligente de frotas de veículos, focada em otimizar operações, controlar manutenções e maximizar a lucratividade de locadoras de pequeno e médio porte.
 
 ## ✨ A História por Trás do Projeto
 
-Tudo começou com uma conversa com meu pai durante um almoço. Ele, dono de oficina, comentou sobre a dificuldade de manter um controle organizado das datas de revisão de cada cliente. Planilhas se perdem, anotações somem e, no fim, um serviço importante pode ser esquecido.
+A ideia do TorqueSync nasceu de uma necessidade real: ajudar meu pai a gerenciar sua locadora de veículos de forma mais eficiente. O controle manual em planilhas e anotações dificultava a visão geral do negócio, o rastreamento de manutenções e a análise de custos e receitas.
 
-Este projeto é a minha resposta para esse desafio: uma aplicação web para centralizar as informações dos clientes e seus carros, registrar os serviços feitos e, o mais importante, prever de forma inteligente a data da próxima manutenção. É a tecnologia servindo para fortalecer um negócio de família!
+Este projeto é a solução para esse desafio. Uma ferramenta criada para ser o braço direito do gestor da frota, centralizando todas as informações cruciais do negócio: desde o status de cada carro até a lucratividade que cada um gera. É um projeto de pai e filho que une tecnologia e empreendedorismo.
 
-## 🚀 Funcionalidades
+## 🚀 Status e Funcionalidades do Projeto
 
-O objetivo é criar um sistema robusto e fácil de usar.
+### O que já foi feito (Fases Concluídas):
+- [X] Levantamento e definição completa dos requisitos do sistema (modelo de locadora).
+- [X] Modelagem e criação do banco de dados relacional (MySQL) com todas as tabelas e relacionamentos.
+- [X] Configuração inicial do ambiente de desenvolvimento com Python e Flask.
+- [X] Inserção de dados de teste para simular um ambiente real de produção.
 
-### Planejadas:
-- [ ] Cadastro completo de Clientes/Donos.
-- [ ] Cadastro de Veículos, associando cada um a um dono.
-- [ ] Registro de Manutenções (serviços realizados, data, quilometragem).
-- [ ] Cálculo automático da data da próxima revisão (baseado em tempo e KM).
-- [ ] Dashboard com alertas para revisões que estão próximas do vencimento.
-- [ ] Sistema de autenticação de usuários (login/senha).
-- [ ] Histórico de serviços por veículo.
+### Funcionalidades Planejadas (Roadmap):
+
+O objetivo é criar um sistema robusto e intuitivo. As funcionalidades serão desenvolvidas nos seguintes módulos:
+
+#### Módulo 1: Gestão da Frota
+- [ ] Cadastro completo de veículos com status (`Disponível`, `Alugado`, `Em Manutenção`).
+- [ ] Edição e visualização dos detalhes de cada veículo.
+
+#### Módulo 2: Gestão de Operações
+- [ ] Cadastro de clientes (locatários).
+- [ ] Criação e gerenciamento de registros de locação (aluguéis).
+- [ ] Registro de devolução com atualização de quilometragem.
+- [ ] Registro de manutenções detalhadas com custos associados.
+
+#### Módulo 3: Gestão de Estoque
+- [ ] Cadastro de peças e controle de quantidade em estoque.
+- [ ] Baixa automática de peças ao registrar uma manutenção.
+- [ ] Alertas visuais para itens com estoque baixo.
+
+#### Módulo 4: Inteligência e Relatórios
+- [ ] Dashboard principal com visão geral da frota e alertas.
+- [ ] Cálculo e notificação de próximas manutenções preventivas.
+- [ ] Relatório de lucratividade por veículo (Receita vs. Custo).
+- [ ] (Upgrade Futuro) Geração de contratos de locação em PDF.
+
+## 🖥️ Telas do Sistema
+
+*(Seção em construção! Em breve, os primeiros wireframes e protótipos do TorqueSync aparecerão aqui, mostrando a cara da nossa aplicação.)*
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -37,12 +61,11 @@ O objetivo é criar um sistema robusto e fácil de usar.
 
 ## 🤝 Como Contribuir
 
-Este é um projeto de aprendizado, mas toda ajuda é bem-vinda! Se você encontrar um bug ou tiver uma sugestão, sinta-se à vontade para abrir uma **Issue**.
+Este é um projeto em desenvolvimento. Sinta-se à vontade para abrir uma **Issue** para relatar bugs ou sugerir novas funcionalidades. Pull Requests são bem-vindos!
 
-1.  Faça um **Fork** do projeto.
-2.  Crie uma nova Branch (`git checkout -b feature/sua-feature-incrivel`).
-3.  Faça o **Commit** das suas alterações (`git commit -m 'Adiciona funcionalidade X'`).
-4.  Faça o **Push** para a Branch (`git push origin feature/sua-feature-incrivel`).
-5.  Abra um **Pull Request**.
+## 📄 Licença
 
-Feito com ☕ e muito código por **Murilo Ribeiro da Silveira**.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+Feito com ☕, código e a ambição da "Operação TorqueSync GT" por **Murilo Ribeiro da Silveira**.
