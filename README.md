@@ -9,7 +9,7 @@
 
 O TorqueSync é uma aplicação web completa para a gestão inteligente de frotas de veículos. Este repositório contém o **backend** da aplicação, uma API RESTful construída com Python e Flask.
 
-**➡️ O frontend, construído com React, está em seu próprio repositório e pode ser encontrado [aqui](https://github.com/MuriloRibeiro01/torquesync-frontend).**
+**➡️ O frontend, construído com React, está em seu próprio repositório e pode ser encontrado [aqui](https://github.com/MuriloRibeiro01/frontend-torquesync.git).**
 
 ## ✨ A História por Trás do Projeto
 
