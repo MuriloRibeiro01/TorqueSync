@@ -70,7 +70,7 @@ O objetivo é criar um sistema robusto e intuitivo. As funcionalidades serão de
 
 ```bash
 # 1. Clone o repositório
-$ git clone [https://github.com/seu-usuario/TorqueSync.git](https://github.com/seu-usuario/TorqueSync.git)
+$ git clone [Repositório GitHub](https://github.com/MuriloRibeiro01/TorqueSync.git)
 
 # 2. Navegue até o diretório do projeto
 $ cd TorqueSync
