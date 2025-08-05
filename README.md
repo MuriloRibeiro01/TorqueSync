@@ -59,6 +59,38 @@ O objetivo é criar um sistema robusto e intuitivo. As funcionalidades serão de
 * **Frontend:** HTML5, CSS3 e JavaScript.
 * **Gerenciamento de Dependências:** Pip.
 
+## ⚙️ Como Rodar o Projeto Localmente
+
+**Pré-requisitos:**
+* Python 3.8+
+* Git
+* Servidor MySQL
+
+```bash
+# 1. Clone o repositório
+$ git clone [https://github.com/seu-usuario/TorqueSync.git](https://github.com/seu-usuario/TorqueSync.git)
+
+# 2. Navegue até o diretório do projeto
+$ cd TorqueSync
+
+# 3. Crie e ative um ambiente virtual (venv)
+$ python -m venv venv
+$ source venv/bin/activate  # No Windows, use `venv\Scripts\activate`
+
+# 4. Instale as dependências do projeto
+# (O arquivo requirements.txt será criado em breve)
+$ pip install Flask mysql-connector-python flask-cors
+
+# 5. Configure o Banco de Dados
+# - Certifique-se de que seu servidor MySQL está rodando.
+# - Crie um novo banco de dados (schema) com o nome 'database_torquesync'.
+# - Execute o script 'database/schema.sql' para criar todas as tabelas.
+# - (Opcional) Execute o script 'database/data.sql' para popular o banco com dados de teste.
+# - Altere suas credenciais do banco no arquivo app.py.
+
+# 6. Rode a aplicação
+$ flask run
+
 ## 🤝 Como Contribuir
 
 Este é um projeto em desenvolvimento. Sinta-se à vontade para abrir uma **Issue** para relatar bugs ou sugerir novas funcionalidades. Pull Requests são bem-vindos!
