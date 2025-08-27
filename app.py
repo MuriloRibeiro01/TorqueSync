@@ -213,12 +213,11 @@ def atualizar_veiculo(id, dados):
 @app.route('/api/veiculos/<int:id>', methods=['DELETE'])
 def deletar_veiculo(id):
     try:
-        # 1. Abre a conexão com o banco, como já conhecemos.
+        # 1. Abre a conexão com o DB
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 2. Executamos o comando SQL DELETE para a ID específica.
-        # Note a vírgula mágica em (id,) para criar a tupla e garantir segurança!
+        # 2. Executa o comando SQL DELETE para a ID específica.
         cursor.execute("DELETE FROM veiculos WHERE id = %s", (id,))
 
         # 3. conn.commit() é CRUCIAL. Sem ele, a alteração fica 'pendente'
@@ -243,6 +242,32 @@ def deletar_veiculo(id):
         # Nosso bloco de segurança para capturar qualquer erro inesperado.
         print(f"Ocorreu um erro ao deletar: {e}")
         return jsonify({"error": str(e)}), 500
+    
+# Rota para buscar todos os clientes
+@app.route('/api/clientes', methods=['GET'])
+def get_clientes():
+    try:
+        # Abre o cursor para se comunicar com o DB
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Pega todos os clientes da tabela
+        query = "SELECT * FROM clientes"
+        cursor.execute(query)
+
+        # Pega todos os resultados que o banco retornou
+        clientes = cursor.fetchall()
+
+        # Retorna a lista de clientes em formato JSON, caso não occorra nenhum erro
+        return jsonify(clientes)
+    except Exception as e:
+        # Caso haja algum erro:
+        print(f"Erro ao buscar clientes: {e}")
+        return jsonify({"error": "Erro interno no servidor"}), 500
+    finally:
+        # Fecha o cursor, dando certo ou não
+        if 'cursor' in locals() and cursor is not None:
+            cursor.close
 
 # Linha para rodar a aplicação em modo de desenvolvimento
 if __name__ == '__main__':
