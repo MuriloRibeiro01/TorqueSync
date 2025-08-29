@@ -1,41 +1,41 @@
-# Importar o 'wraps'
+# Imports 'wraps'
 from functools import wraps
 
-# Importa o Flask e outras feramentas que serão úteis
+# Imports Flask and others usifull tools.
 from flask import Flask, jsonify, request
 
-from flask_cors import CORS # Importa o CORS
+from flask_cors import CORS # Imports CORS.
 
-# Importa o conecetor do MySQL
+# Impots MySQL Connector.
 import mysql.connector
 
-# Aqui é criado um Decorator
+# Creates an Decorator.
 def validacao_veiculo_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
 
-        # Primeiro ele pega os dados
+        # First, it pulls the JSON data from the request.
         dados = request.get_json()
 
-        # Segundo ele faz a validação
+        # Second, it verifies the data.
         if not dados or 'placa' not in dados or 'modelo' not in dados:
             return jsonify({"error": "Dados incompletos. Placa e modelo são obrigatórios"}), 400  # 400 = Bad Request
 
-        # Terceiro, se tudo estiver OK, ele continua para a rota original
+        # Third, is everything is OK, it continues to the original route.
         return f(dados = dados, *args, **kwargs)
     return decorated_function
 
-# Cria a instância da nossa aplicação
+# Create the instance of the application.
 app = Flask(__name__)
-CORS(app) # Inicializa o CORS com a aplicação
+CORS(app) # Starts CORS.
 
-# Configuração da coneção com o Banco de Dados
+# Configures the connection with the Database.
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '!Itadaki08'
 app.config['MYSQL_DB'] = 'database_torquesync'
 
-# Função para conectar com o database
+# Function to connect with the database.
 def get_db_connection():
     conn = mysql.connector.connect(
         host=app.config['MYSQL_HOST'],
@@ -45,13 +45,12 @@ def get_db_connection():
     )
     return conn
 
-
-# Rota para listar os veículos (VERSÃO DE DEPURAÇÃO)
+# Route to list the vehicles.
 @app.route('/api/veiculos', methods=['GET'])
 def get_veiculos():
     print("\n--- Rota /api/veiculos foi chamada! ---")
 
-    conn = None  # Apenas para garantir que a variável exista
+    conn = None  # Just to make sure the variable exists.
     try:
         print("1. Tentando conectar ao banco de dados...")
         conn = get_db_connection()
@@ -74,22 +73,21 @@ def get_veiculos():
         return jsonify(veiculos), 200
 
     except Exception as e:
-        # Este bloco vai pegar qualquer erro e nos mostrar no terminal!
+        # This block will catch any error and show it in the terminal.
         print("\n!!!!!! OCORREU UMA EXCEÇÃO NO BLOCO TRY !!!!!!")
         print(f"TIPO DO ERRO: {type(e)}")
         print(f"MENSAGEM DO ERRO: {e}\n")
 
-        # Bloco de segurança para garantir que a conexão seja fechada em caso de erro
+        # Security block to ensure the connection is closed in case of error
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
             print("Conexão de emergência com o banco foi fechada.")
 
-        # Retorna o erro para o frontend, mas o print no terminal é o mais importante
+        # Return the error to the frontend, but the terminal print is more important
         return jsonify({'error': str(e)}), 500
 
-
-# Rota para Buscar um específico (Ex: buscar só o carro com ID = 1)
+# Route to get a specify vehicle by ID.
 @app.route('/api/veiculos/<int:id>', methods=['GET'])
 def get_veiculo_por_id(id):
     try:
@@ -98,7 +96,7 @@ def get_veiculo_por_id(id):
 
         cursor.execute('SELECT * FROM veiculos WHERE id = %s', (id,))
 
-        veiculo = cursor.fetchone() # fetchone() pega apenas um resultado
+        veiculo = cursor.fetchone() # fetchone() gets a single result
 
         cursor.close()
         conn.close()
@@ -106,50 +104,47 @@ def get_veiculo_por_id(id):
         if veiculo:
             return jsonify(veiculo), 200
         else:
-            return jsonify({"error": "Veículo não encontrado"}), 404 # 404 é o código para "não encontrado"
+            return jsonify({"error": "Veículo não encontrado"}), 404 # 404 is the code to "not found"
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-
-
-# Rota para criar um novo (Ex: adicionar um novo carro no database)
+# Route to create a new vehicle.
 @app.route('/api/veiculos', methods=['POST'])
 @validacao_veiculo_required
 def criar_veiculo(dados):
 
-    # Extrai os dados do JSON.
+    # Extracts the data from the JSON.
     placa = dados['placa']
     modelo = dados['modelo']
-    ano = dados.get('ano') # o .get() vai ser mais seguro porque retorna None se a chave não existir.
+    ano = dados.get('ano') # The .get() is going to be more safe, cause returns None if the key doesn't exist
     cor = dados.get('cor')
     quilometragem = dados.get('quilometragem')
-    status = dados.get('status', 'Disponível') # Seta o valor como 'Disponível', já que um carro que acabou de chegar não vai estar alugado logo de cara.
+    status = dados.get('status', 'Disponível') # Sets the value as 'Disponível', an car that comes to the rental company is available by default.
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Query pra inserir o novo veículo.
+        # Query to insert a new vehicle.
         query = """
             INSERT INTO veiculos (placa, modelo, ano, cor, quilometragem, status)
             VALUES (%s, %s, %s, %s, %s, %s)
         """
 
-        # Executa a query com os dados em uma tupla
+        # Execute the query with the data in a tuple.
         cursor.execute(query, (placa, modelo, ano, cor, quilometragem, status))
 
-        # Pega o ID do veículo que foi criado
+        # Gets the ID of the newly added vehicle.
         novo_veiculo_id = cursor.lastrowid # Last Row ID
 
-        # Isso confirma a transação
+        # Confirms the changes in the database. Like and commit in Git.
         conn.commit()
 
         cursor.close()
         conn.close()
 
-        # Agora ele vai retornar o objeto em si
+        # Now it going to return the object that was added.
         novo_veiculo_adicionado = {
             'id': novo_veiculo_id,
             'placa': placa,
@@ -162,13 +157,13 @@ def criar_veiculo(dados):
         return jsonify(novo_veiculo_adicionado), 201
 
     except mysql.connector.Error as erro:
-        # Trata os erros específicos do MySQL
+        # Treats the specific MySQL error.
         return jsonify({"error": str(erro)}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-# Rota para Atualizar um existente (Ex: mudar o status de um carro)
+# Route to update a vehicle. By the ID.
 @app.route('/api/veiculos/<int:id>', methods=['PUT'])
 @validacao_veiculo_required
 def atualizar_veiculo(id, dados):
@@ -183,95 +178,96 @@ def atualizar_veiculo(id, dados):
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Query para atualizar o veiculo com um ID específico
+        # Query to update a vehicle. By the ID.
         query = """
             UPDATE veiculos 
             SET placa = %s, modelo = %s, ano = %s, cor = %s, quilometragem = %s, status = %s
             WHERE id = %s
         """
 
-        # Executa a query com os dados em uma tupla
+        # Execute the query with the data in a tuple.
         cursor.execute(query, (placa, modelo, ano, cor, quilometragem, status, id))
 
         conn.commit()
 
-        # Verifica se alguma linha foi realmente atualizada
+        # Verifies if any row was actually updated.
         if cursor.rowcount == 0:
             return jsonify({"error": "Veículo não encontrado"}), 404
 
         cursor.close()
         conn.close()
 
-        # Aqui ele retorna uma reposta de sucesso
+        # It returns an succes response.
         return jsonify({"message": "Veículo atualizado com sucesso!"}), 200 # 200 = OK
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-# Rota para Deletar um (VERSÃO FINAL)
+# Route to delete an vehicle. By the ID.
 @app.route('/api/veiculos/<int:id>', methods=['DELETE'])
 def deletar_veiculo(id):
     try:
-        # 1. Abre a conexão com o DB
+        # 1. Opens the connection with the database.
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 2. Executa o comando SQL DELETE para a ID específica.
+        # 2. Executes an SQL DELETE command for an vehicle with the given ID.
         cursor.execute("DELETE FROM veiculos WHERE id = %s", (id,))
 
-        # 3. conn.commit() é CRUCIAL. Sem ele, a alteração fica 'pendente'
-        # e nunca é salva de verdade no banco de dados.
+        # 3. Commits it again to confirm the changes in the database. IT'S VERY IMPORTANT!
         conn.commit()
 
-        # 4. Verificamos se alguma linha foi de fato deletada.
-        # Se cursor.rowcount for 0, significa que não encontramos nenhum veículo com aquele ID.
+        # 4. Verifies if any row was actually deleted.
+        # If cursor.rowcount == 0, it means that no vehicle was found with that ID.
         if cursor.rowcount == 0:
             cursor.close()
             conn.close()
             return jsonify({"error": "Veículo não encontrado"}), 404
 
-        # 5. Fecha tudo para liberar recursos.
+        # 5. Closes everything to avoid memory leaks.
         cursor.close()
         conn.close()
 
-        # 6. Retorna uma mensagem de sucesso para o cliente.
+        # 6. Returns an succes message to the client.
         return jsonify({"message": "Veículo deletado com sucesso!"}), 200
 
     except Exception as e:
-        # Nosso bloco de segurança para capturar qualquer erro inesperado.
+        # Secutity block to capture any error and print it in the terminal.
         print(f"Ocorreu um erro ao deletar: {e}")
         return jsonify({"error": str(e)}), 500
     
-# Rota para buscar todos os clientes
+# Route to search all clients.
 @app.route('/api/clientes', methods=['GET'])
 def get_clientes():
     try:
-        # Abre o cursor para se comunicar com o DB
+        # Opens the Cursor to comunicate with the database
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Pega todos os clientes da tabela
+        # Gets all clients from the table.
         query = "SELECT * FROM clientes"
         cursor.execute(query)
 
-        # Pega todos os resultados que o banco retornou
+        # Gets all results returned from the database.
         clientes = cursor.fetchall()
 
-        # Retorna a lista de clientes em formato JSON, caso não occorra nenhum erro
+        # Returns the clients list in JSON format, if no error occursed.
         return jsonify(clientes)
     except Exception as e:
-        # Caso haja algum erro:
+        # If any error occurs:
         print(f"Erro ao buscar clientes: {e}")
         return jsonify({"error": "Erro interno no servidor"}), 500
     finally:
-        # Fecha o cursor, dando certo ou não
+        # Closes Cursor, if it works or not.
         if 'cursor' in locals() and cursor is not None:
             cursor.close
 
-# Linha para rodar a aplicação em modo de desenvolvimento
+# Row to run the application in administrator mode.
 if __name__ == '__main__':
     app.run(debug=True)
 
-# Adicionar número do ID dos veículos
+
+# Ideias de melhorias:
+# Adicionar número do ID dos veículos.
 # Ao apagar um dos veículos, automaticamente transformar o próximo veículo naquele ID qual foi apagado.
