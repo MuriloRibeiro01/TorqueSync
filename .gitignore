@@ -8,3 +8,7 @@ __pycache__/
 # Arquivos de configuração do IDE
 .idea/
 .vscode/
+
+# Arquivo de segredos
+.env
+
